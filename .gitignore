@@ -1,0 +1,12 @@
+# Ignore the build directory
+Build/
+
+# Ignore miscellaneous system files
+.DS_Store
+Thumbs.db
+
+# CLion and VS22 project files
+.idea
+cmake-build-*
+out/
+.vs
