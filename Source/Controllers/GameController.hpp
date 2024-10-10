@@ -22,7 +22,7 @@ constexpr auto T_TETROMINO = 6;
 
 class GameController {
 public:
-    GameController();
+    GameController(sf::RenderWindow& window);
 
     void runGame();
 
@@ -35,7 +35,7 @@ protected:
     GameView gameView;
     //GameState currentState = GameState::MainMenu;
 
-    bool isGameOver = false;
+    bool isGameOver;
 
     std::vector<int> generateNewBag();
     void startTetrisGame();

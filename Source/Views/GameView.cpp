@@ -1,21 +1,44 @@
 #include "GameView.hpp"
 
 GameView::GameView(sf::RenderWindow& window)
-    : lockDelay(0.5),
-    lockDelayValue(lockDelay),
-    lockCount(14),
-    lockCountValue(lockCount),
+    : holdPiece(0),
+    moveX(0),
+    rotatePiece(0),
+    colorPiece(0),
+    hardDrop(0),
+    holded(0),
+    moveLeft(0),
+    moveRight(0),
+    start(0),
+    lockDelay(0),
+    lockDelayValue(0.5),
+    lockCount(0),
+    lockCountValue(15),
     totalLineCount(0),
     totalPieceCount(0),
     boardWobble(0),
-    pieceIndicatorShapeAlpha(0),
+    pieceIndicatorShapeAlpha(255),
     lineClearCombo(0),
     btbCombo(0),
-    elapsedTime(trackingFrameTime.getElapsedTime().asSeconds()),
-    selectedButtonIndex(-1)
-{
-    board[HEIGHT][WIDTH] = { 0 };
-};
+    elapsedTime(0.0f),
+    selectedButtonIndex(-1),
+
+    hoveredButton(nullptr) {
+    for (int i = 0; i < HEIGHT; ++i) {
+        for (int j = 0; j < WIDTH; ++j) {
+            board[i][j] = 0;
+        }
+    }
+
+    trackingFrameTime.restart();
+    trackingGameTime.restart();
+    elapsedGameTime.restart();
+
+    initializeTextures();
+    fontGame.loadFromFile(resourcePath + "/Fonts/Minecraft.ttf");
+
+    initializeButtons();
+}
 
 void GameView::drawGameOverMenu(const LeaderBoard& leaderboard, int currentScore){}
 
@@ -23,28 +46,32 @@ void GameView::handleInput(const sf::Event& event){}
 void GameView::handleGameOverMouseMove(int mouseX, int mouseY){}
 void GameView::handleGameOverKeyboardInput(const sf::Event& event){}
 
-void GameView::initializeTextures()
-{
-    textureGhost.loadFromFile(textureGhostPath);
-    spriteGhost.getTexture(textureGhost);
+void GameView::initializeTextures() {
+    if (!textureGhost.loadFromFile(textureGhostPath)) {
+        throw std::runtime_error("Failed to load ghost texture");
+    }
+    spriteGhost.setTexture(textureGhost);
     spriteGhost.setTextureRect(sf::IntRect(0, 0, TEXTURE_SIZE, TEXTURE_SIZE));
-
-    sf::Texture texturePiece;
-    texturePiece.loadFromFile(texturePiecePath);
-    sf::Sprite spritePiece(texturePiece);
+    if (!texturePiece.loadFromFile(texturePiecePath)) {
+        throw std::runtime_error("Failed to load piece texture");
+    }
+    spritePiece.setTexture(texturePiece);
     spritePiece.setTextureRect(sf::IntRect(0, 0, TEXTURE_SIZE, TEXTURE_SIZE));
 
-    sf::Texture textureLockedPiece;
-    textureLockedPiece.loadFromFile(resourcePath + "/Sprites/piece_lock.png");
-    sf::Sprite spriteLockedPiece(textureLockedPiece);
+    if (!textureLockedPiece.loadFromFile(resourcePath + "/Sprites/piece_lock.png")) {
+        throw std::runtime_error("Failed to load locked piece texture");
+    }
+    spriteLockedPiece.setTexture(textureLockedPiece);
     spriteLockedPiece.setTextureRect(sf::IntRect(0, 0, TEXTURE_SIZE, TEXTURE_SIZE));
 
-    sf::Texture textureBoard;
-    textureBoard.loadFromFile(resourcePath + "/Sprites/board.png");
-    sf::Sprite spriteBoard(textureBoard);
+    if (!textureBoard.loadFromFile(resourcePath + "/Sprites/board.png")) {
+        throw std::runtime_error("Failed to load board texture");
+    }
+    spriteBoard.setTexture(textureBoard);
 
-    sf::Font fontGame;
-    fontGame.loadFromFile(resourcePath + "/Fonts/Minecraft.ttf");
+    if (!fontGame.loadFromFile(resourcePath + "/Fonts/Minecraft.ttf")) {
+        throw std::runtime_error("Failed to load font");
+    }
 }
 
 bool GameView::isGameOverReplayClicked(int mouseX, int mouseY){ 
@@ -55,7 +82,7 @@ bool GameView::isGameOverToMainMenuClicked(int mouseX, int mouseY) {
     }
 
     //---------------
-void GameView::drawBackground(){
+void GameView::drawBackground(sf::RenderWindow& gameWindow){
         sf::RectangleShape backboardShape;
         backboardShape.setSize(sf::Vector2f(320, 650));
         backboardShape.setFillColor(sf::Color::White);
@@ -73,11 +100,11 @@ void GameView::drawBackground(){
         gameWindow.draw(backboardShape);
 
     }
-void GameView::drawPlayingField(){
+void GameView::drawPlayingField(sf::RenderWindow& gameWindow){
         spriteBoard.setPosition(150, -30 + boardWobble);
         gameWindow.draw(spriteBoard);
     }
-void GameView::drawDAS(){
+void GameView::drawDAS(sf::RenderWindow& gameWindow){
         float dasProgress = std::max((double)0, (double)(lockDelayValue / lockDelay));
 
         sf::RectangleShape dasBarShape;
@@ -86,7 +113,7 @@ void GameView::drawDAS(){
         dasBarShape.setPosition(140, 700 + boardWobble);
         gameWindow.draw(dasBarShape);
     }
-void GameView::drawHeldTetramino(){
+void GameView::drawHeldTetramino(sf::RenderWindow& gameWindow){
         sf::CircleShape lockCountCircle;
         lockCountCircle.setRadius(6);
         lockCountCircle.setFillColor(sf::Color::White);
@@ -142,7 +169,7 @@ void GameView::drawHeldTetramino(){
             }
         }
     }
-void GameView::drawNextTetraminos(){
+void GameView::drawNextTetraminos(sf::RenderWindow& gameWindow){
         spritePiece.setColor(sf::Color(255, 255, 255, 255));
         for (int i = 0; i < bagOfSevenPieces.size() + nextBagOfSevenPieces.size(); i++) {
             if (i < 5) {
@@ -199,7 +226,7 @@ void GameView::drawNextTetraminos(){
             }
         }
     }
-void GameView::drawFieldTetramino(){
+void GameView::drawFieldTetramino(sf::RenderWindow& gameWindow){
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
                 spritePiece.setColor(sf::Color(255, 255, 255, 255));
@@ -212,7 +239,7 @@ void GameView::drawFieldTetramino(){
             }
         }
     }
-void GameView::drawLockedTetramino(){
+void GameView::drawLockedTetramino(sf::RenderWindow& gameWindow){
         for (int i = 0; i < piecesLock.size(); i++) {
             for (int j = 0; j < 4; j++) {
                 spriteLockedPiece.setTextureRect(sf::IntRect((int)piecesLock.at(i).at(j).animation * TEXTURE_SIZE, 0, TEXTURE_SIZE, TEXTURE_SIZE));
@@ -231,14 +258,14 @@ void GameView::drawLockedTetramino(){
             }
         }
     }
-void GameView::drawGhostTetramino(){
+void GameView::drawGhostTetramino(sf::RenderWindow& gameWindow){
         spriteGhost.setTextureRect(sf::IntRect(colorPiece * TEXTURE_SIZE, 0, TEXTURE_SIZE, TEXTURE_SIZE));
         for (int i = 0; i < 4; i++) {
             spriteGhost.setPosition(currentPiece[i].x * TEXTURE_SIZE + 150, ghost[i].y * TEXTURE_SIZE - 90 + boardWobble);
             gameWindow.draw(spriteGhost);
         }
     }
-void GameView::drawCurrentTetramino(){
+void GameView::drawCurrentTetramino(sf::RenderWindow& gameWindow){
         pieceIndicatorShapeAlpha = (sin(elapsedGameTime.getElapsedTime().asSeconds() * 10) + 1) * 30;
         sf::RectangleShape pieceIndicatorShape;
         pieceIndicatorShape.setSize(sf::Vector2f(30, 30));
@@ -260,7 +287,7 @@ void GameView::drawCurrentTetramino(){
             gameWindow.draw(pieceIndicatorShape);
         }
     }
-void GameView::drawParticles(){
+void GameView::drawParticles(sf::RenderWindow& gameWindow){
         for (int i = 0; i < particles.size(); i++) {
             particles.at(i).update(elapsedTime);
             particles.at(i).draw(&gameWindow);
@@ -269,7 +296,7 @@ void GameView::drawParticles(){
             }
         }
     }
-void GameView::drawText(){
+void GameView::drawText(sf::RenderWindow& gameWindow){
         sf::Text text;
         text.setFont(fontGame);
         text.setCharacterSize(35);

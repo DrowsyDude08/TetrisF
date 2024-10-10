@@ -93,17 +93,17 @@ protected:
     sf::Text gameOverToMainMenuText;
     ColorPalette palette;
     //---------------
-    void drawBackground();
-    void drawPlayingField();
-    void drawDAS();
-    void drawHeldTetramino();
-    void drawNextTetraminos();
-    void drawFieldTetramino();
-    void drawLockedTetramino();
-    void drawGhostTetramino();
-    void drawCurrentTetramino();
-    void drawParticles();
-    void drawText();
+    void drawBackground(sf::RenderWindow& gameWindow);
+    void drawPlayingField(sf::RenderWindow& gameWindow);
+    void drawDAS(sf::RenderWindow& gameWindow);
+    void drawHeldTetramino(sf::RenderWindow& gameWindow);
+    void drawNextTetraminos(sf::RenderWindow& gameWindow);
+    void drawFieldTetramino(sf::RenderWindow& gameWindow);
+    void drawLockedTetramino(sf::RenderWindow& gameWindow);
+    void drawGhostTetramino(sf::RenderWindow& gameWindow);
+    void drawCurrentTetramino(sf::RenderWindow& gameWindow);
+    void drawParticles(sf::RenderWindow& gameWindow);
+    void drawText(sf::RenderWindow& gameWindow);
     //---------------
     std::string resourcePath = RESOURCE_DIR;
 
