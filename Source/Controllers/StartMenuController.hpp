@@ -1,5 +1,5 @@
-#ifndef MAINGAMECONTROLLER_HPP
-#define MAINGAMECONTROLLER_HPP
+#ifndef STARTMENUCONTROLLER_HPP
+#define STARTMENUCONTROLLER_HPP
 
 #include "../Views/GameWindowView.hpp"
 #include "../Utils/LeaderBoard.hpp"
@@ -25,9 +25,9 @@ constexpr auto I_TETROMINO = 4;
 constexpr auto J_TETROMINO = 5;
 constexpr auto T_TETROMINO = 6;
 
-class MainGameController {
+class StartMenuController {
 public:
-    MainGameController();
+    StartMenuController();
 
     void runGame();
 
@@ -73,4 +73,4 @@ protected:
     int TEXTURE_SIZE = 30;
 };
 
-#endif // MAINGAMECONTROLLER_HPP
+#endif // STARTMENUCONTROLLER_HPP

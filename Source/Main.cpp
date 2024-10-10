@@ -1,7 +1,7 @@
-#include "Controllers/MainGameController.hpp"
+#include "Controllers/StartMenuController.hpp"
 
 int main() {
-    MainGameController controller;
+    StartMenuController controller;
     controller.runGame();
     
 

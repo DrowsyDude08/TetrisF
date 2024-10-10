@@ -22,8 +22,8 @@ find_package(GTest CONFIG REQUIRED)
 
 add_executable(Tetris_SFML
 Source/Main.cpp
-Source/Controllers/MainGameController.hpp
-Source/Controllers/MainGameController.cpp
+Source/Controllers/StartMenuController.hpp
+Source/Controllers/StartMenuController.cpp
 Source/Controllers/GameController.hpp
 Source/Controllers/GameController.cpp
 Source/Utils/ColorPalette.hpp

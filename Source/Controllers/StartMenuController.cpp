@@ -1,8 +1,7 @@
-#include "MainGameController.hpp"
+#include "StartMenuController.hpp"
 
-#include "MainGameController.hpp"
 
-MainGameController::MainGameController()
+StartMenuController::StartMenuController()
     : window(sf::VideoMode(600, 720), "Tetris Game"), 
     gameWindowView(window),
     leaderboard(),
@@ -11,7 +10,7 @@ MainGameController::MainGameController()
     window.setFramerateLimit(FRAMERATE);
 
 }
-void MainGameController::runGame() {
+void StartMenuController::runGame() {
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -42,7 +41,7 @@ void MainGameController::runGame() {
     }
 }
 
-void MainGameController::handleMainMenuEvent(const sf::Event& event) {
+void StartMenuController::handleMainMenuEvent(const sf::Event& event) {
     if (currentState == GameState::MainMenu) {
         if (event.type == sf::Event::MouseButtonPressed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter)) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
@@ -86,11 +85,11 @@ void MainGameController::handleMainMenuEvent(const sf::Event& event) {
     }
 }
 
-void MainGameController::swapTextures() {
+void StartMenuController::swapTextures() {
     std::swap(textureGhostPath, texturePiecePath);
     std::cout << "Textures swapped!\n";
 }
-std::vector<int> MainGameController::generateNewBag() {
+std::vector<int> StartMenuController::generateNewBag() {
     std::vector<int> templateBag;
 
     for (int i = 0; i < 7; i++) {
@@ -109,7 +108,7 @@ std::vector<int> MainGameController::generateNewBag() {
     return newBag;
 }
 
-bool MainGameController::isCollided() {
+bool StartMenuController::isCollided() {
     for (int i = 0; i < 4; i++) {
         if (currentPiece[i].x < 0 || currentPiece[i].x >= WIDTH || currentPiece[i].y >= HEIGHT) {
             return false;
@@ -121,7 +120,7 @@ bool MainGameController::isCollided() {
     return true;
 }
 
-bool MainGameController::isCollidedGhost() {
+bool StartMenuController::isCollidedGhost() {
     for (int i = 0; i < 4; i++) {
         if (ghost[i].y >= HEIGHT) {
             return false;
@@ -133,7 +132,7 @@ bool MainGameController::isCollidedGhost() {
     return true;
 }
 
-bool MainGameController::isDead() {
+bool StartMenuController::isDead() {
     for (int i = 0; i < 4; i++) {
         if (board[currentPiece[i].y][currentPiece[i].x]) {
             return true;
@@ -142,7 +141,7 @@ bool MainGameController::isDead() {
     return false;
 }
 
-void MainGameController::createParticle(std::vector<Particle>* particles) {
+void StartMenuController::createParticle(std::vector<Particle>* particles) {
     for (int i = 0; i < 4; i++) {
         Particle particle((currentPiece[i].x * 30) + 150 + 15 + (rand() % 60 - 30),
             (currentPiece[i].y * 30) - 60 - 30,
@@ -152,13 +151,13 @@ void MainGameController::createParticle(std::vector<Particle>* particles) {
     }
 }
 
-int MainGameController::sign(int num) {
+int StartMenuController::sign(int num) {
     if (num < 0) return -1;
     else if (num > 0) return 1;
     else return 0;
 }
 
-int MainGameController::calculateScore(int lineClearCount, int combo) {
+int StartMenuController::calculateScore(int lineClearCount, int combo) {
     int points = 0;
     switch (lineClearCount) {
     case 1: points = 100; break;
@@ -169,7 +168,7 @@ int MainGameController::calculateScore(int lineClearCount, int combo) {
     points *= (combo + 1);
     return points;
 }
-void MainGameController::startTetrisGame() {
+void StartMenuController::startTetrisGame() {
     //в Конструктор GameView
     sf::RenderWindow gameWindow(sf::VideoMode(600, 720), "Tetris");
     srand(static_cast<unsigned int>(time(0))); 
