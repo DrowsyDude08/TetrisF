@@ -5,6 +5,7 @@
 
 class Particle {
 public:
+    //Инициализирует новую частицу с заданным положением, скоростью и направлением.
     Particle(int x, int y, int speed, int direction);
 
     double x;

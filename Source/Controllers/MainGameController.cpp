@@ -10,7 +10,8 @@ MainGameController::MainGameController()
 {
     window.setFramerateLimit(FRAMERATE);
 
-}void MainGameController::runGame() {
+}
+void MainGameController::runGame() {
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -33,7 +34,7 @@ MainGameController::MainGameController()
             break;
         case GameState::GameOver:
             gameWindowView.drawGameOverMenu(leaderboard, score);
-            leaderboard.addScore("Игрок захардкожен", score);
+            leaderboard.addScore("Игрок 1", score);
             break;
         }
 
@@ -146,7 +147,7 @@ void MainGameController::createParticle(std::vector<Particle>* particles) {
         Particle particle((currentPiece[i].x * 30) + 150 + 15 + (rand() % 60 - 30),
             (currentPiece[i].y * 30) - 60 - 30,
             rand() % 250 + 150,
-            270 + (rand() % 60 - 30));
+            rand() % 360);
         particles->push_back(particle);
     }
 }
@@ -169,23 +170,24 @@ int MainGameController::calculateScore(int lineClearCount, int combo) {
     return points;
 }
 void MainGameController::startTetrisGame() {
+    //в Конструктор GameView
     sf::RenderWindow gameWindow(sf::VideoMode(600, 720), "Tetris");
     srand(static_cast<unsigned int>(time(0))); 
     
     sf::Texture textureGhost;
     textureGhost.loadFromFile(textureGhostPath);
     sf::Sprite spriteGhost(textureGhost);
-    spriteGhost.setTextureRect(sf::IntRect(0, 0, textureSize, textureSize));
+    spriteGhost.setTextureRect(sf::IntRect(0, 0, TEXTURE_SIZE, TEXTURE_SIZE));
 
     sf::Texture texturePiece;
     texturePiece.loadFromFile(texturePiecePath);
     sf::Sprite spritePiece(texturePiece);
-    spritePiece.setTextureRect(sf::IntRect(0, 0, textureSize, textureSize));
+    spritePiece.setTextureRect(sf::IntRect(0, 0, TEXTURE_SIZE, TEXTURE_SIZE));
 
     sf::Texture textureLockedPiece;
     textureLockedPiece.loadFromFile(resourcePath + "/Sprites/piece_lock.png");
     sf::Sprite spriteLockedPiece(textureLockedPiece);
-    spriteLockedPiece.setTextureRect(sf::IntRect(0, 0, textureSize, textureSize));
+    spriteLockedPiece.setTextureRect(sf::IntRect(0, 0, TEXTURE_SIZE, TEXTURE_SIZE));
 
     sf::Texture textureBoard;
     textureBoard.loadFromFile(resourcePath + "/Sprites/board.png");
@@ -233,7 +235,7 @@ restart:
             }
         }
 
-        start = 3;
+        start = 1;
         gameTimer = 0;
         gameDelay = 0.5;
         moveX = 0;
@@ -686,102 +688,112 @@ restart:
                         previousPiecePosition[i] = currentPiece[i];
                         beforeRotation = currentPiece[i].rotation;
 
-                        if (colorPiece == I_TETROMINO) {
-                            if (currentPiece[i].rotation == 1) {
-                                if (rotatePiece == 1) {
-                                    if (i == 0) {
-                                        currentPiece[i].x -= 1, currentPiece[i].y -= 1;
-                                    }
-                                    if (i == 2) {
-                                        currentPiece[i].x += 1, currentPiece[i].y += 1;
-                                    }
-                                    if (i == 3) {
-                                        currentPiece[i].x += 2, currentPiece[i].y += 2;
-                                    }
-                                } else {
-                                    if (i == 0) {
-                                        currentPiece[i].x -= 2, currentPiece[i].y += 2;
-                                    }
-                                    if (i == 1) {
-                                        currentPiece[i].x -= 1, currentPiece[i].y += 1;
-                                    }
-                                    if (i == 3) {
-                                        currentPiece[i].x += 1, currentPiece[i].y -= 1;
-                                    }
-                                }
-                            }
-                            if (currentPiece[i].rotation == 2) {
+                       if (colorPiece == I_TETROMINO) {
+                           switch (currentPiece[i].rotation)
+                           {
+                           case 1:
+                               if (rotatePiece == 1) {
+                                   if (i == 0) {
+                                       currentPiece[i].x -= 1, currentPiece[i].y -= 1;
+                                   }
+                                   if (i == 2) {
+                                       currentPiece[i].x += 1, currentPiece[i].y += 1;
+                                   }
+                                   if (i == 3) {
+                                       currentPiece[i].x += 2, currentPiece[i].y += 2;
+                                   }
+                               }
+                               else {
+                                   if (i == 0) {
+                                       currentPiece[i].x -= 2, currentPiece[i].y += 2;
+                                   }
+                                   if (i == 1) {
+                                       currentPiece[i].x -= 1, currentPiece[i].y += 1;
+                                   }
+                                   if (i == 3) {
+                                       currentPiece[i].x += 1, currentPiece[i].y -= 1;
+                                   }
+                               }
+                               break;
 
-                                if (rotatePiece == 1) {
-                                    if (i == 0) {
-                                        currentPiece[i].x -= 2, currentPiece[i].y += 2;
-                                    }
-                                    if (i == 1) {
-                                        currentPiece[i].x -= 1, currentPiece[i].y += 1;
-                                    }
-                                    if (i == 3) {
-                                        currentPiece[i].x += 1, currentPiece[i].y -= 1;
-                                    }
-                                }
-                                else {
-                                    if (i == 0) {
-                                        currentPiece[i].x += 1, currentPiece[i].y += 1;
-                                    }
-                                    if (i == 2) {
-                                        currentPiece[i].x -= 1, currentPiece[i].y -= 1;
-                                    }
-                                    if (i == 3) {
-                                        currentPiece[i].x -= 2, currentPiece[i].y -= 2;
-                                    }
-                                }
-                            }
-                            if (currentPiece[i].rotation == 3) {
-                                if (rotatePiece == 1) {
-                                    if (i == 0) {
-                                        currentPiece[i].x += 1, currentPiece[i].y += 1;
-                                    }
-                                    if (i == 2) {
-                                        currentPiece[i].x -= 1, currentPiece[i].y -= 1;
-                                    }
-                                    if (i == 3) {
-                                        currentPiece[i].x -= 2, currentPiece[i].y -= 2;
-                                    }
-                                } else {
-                                    if (i == 0) {
-                                        currentPiece[i].x += 2, currentPiece[i].y -= 2;
-                                    }
-                                    if (i == 1) {
-                                        currentPiece[i].x += 1, currentPiece[i].y -= 1;
-                                    }
-                                    if (i == 3) {
-                                        currentPiece[i].x -= 1, currentPiece[i].y += 1;
-                                    }
-                                }
-                            }
+                           case 2:
+                               if (rotatePiece == 1) {
+                                   if (i == 0) {
+                                       currentPiece[i].x -= 2, currentPiece[i].y += 2;
+                                   }
+                                   if (i == 1) {
+                                       currentPiece[i].x -= 1, currentPiece[i].y += 1;
+                                   }
+                                   if (i == 3) {
+                                       currentPiece[i].x += 1, currentPiece[i].y -= 1;
+                                   }
+                               }
+                               else {
+                                   if (i == 0) {
+                                       currentPiece[i].x += 1, currentPiece[i].y += 1;
+                                   }
+                                   if (i == 2) {
+                                       currentPiece[i].x -= 1, currentPiece[i].y -= 1;
+                                   }
+                                   if (i == 3) {
+                                       currentPiece[i].x -= 2, currentPiece[i].y -= 2;
+                                   }
+                               }
+                               break;
 
-                            if (currentPiece[i].rotation == 4) {
-                                if (rotatePiece == 1) {
-                                    if (i == 0) {
-                                        currentPiece[i].x += 2, currentPiece[i].y -= 2;
-                                    }
-                                    if (i == 1) {
-                                        currentPiece[i].x += 1, currentPiece[i].y -= 1;
-                                    }
-                                    if (i == 3) {
-                                        currentPiece[i].x -= 1, currentPiece[i].y += 1;
-                                    }
-                                } else {
-                                    if (i == 0) {
-                                        currentPiece[i].x -= 1, currentPiece[i].y -= 1;
-                                    }
-                                    if (i == 2) {
-                                        currentPiece[i].x += 1, currentPiece[i].y += 1;
-                                    }
-                                    if (i == 3) {
-                                        currentPiece[i].x += 2, currentPiece[i].y += 2;
-                                    }
-                                }
-                            }
+						   case 3:
+                               if (rotatePiece == 1) {
+                                   if (i == 0) {
+                                       currentPiece[i].x += 1, currentPiece[i].y += 1;
+                                   }
+                                   if (i == 2) {
+                                       currentPiece[i].x -= 1, currentPiece[i].y -= 1;
+                                   }
+                                   if (i == 3) {
+                                       currentPiece[i].x -= 2, currentPiece[i].y -= 2;
+                                   }
+                               }
+                               else {
+                                   if (i == 0) {
+                                       currentPiece[i].x += 2, currentPiece[i].y -= 2;
+                                   }
+                                   if (i == 1) {
+                                       currentPiece[i].x += 1, currentPiece[i].y -= 1;
+                                   }
+                                   if (i == 3) {
+                                       currentPiece[i].x -= 1, currentPiece[i].y += 1;
+                                   }
+                               }
+							   break;
+							   
+						   case 4:
+                               if (rotatePiece == 1) {
+                                   if (i == 0) {
+                                       currentPiece[i].x += 2, currentPiece[i].y -= 2;
+                                   }
+                                   if (i == 1) {
+                                       currentPiece[i].x += 1, currentPiece[i].y -= 1;
+                                   }
+                                   if (i == 3) {
+                                       currentPiece[i].x -= 1, currentPiece[i].y += 1;
+                                   }
+                               }
+                               else {
+                                   if (i == 0) {
+                                       currentPiece[i].x -= 1, currentPiece[i].y -= 1;
+                                   }
+                                   if (i == 2) {
+                                       currentPiece[i].x += 1, currentPiece[i].y += 1;
+                                   }
+                                   if (i == 3) {
+                                       currentPiece[i].x += 2, currentPiece[i].y += 2;
+                                   }
+                               }
+                               break;
+						   
+                           default:
+                               break;
+                           }
 
                             currentPiece[i].rotation += rotatePiece;
                         } else if (colorPiece != O_TETROMINO) {
@@ -1197,7 +1209,7 @@ restart:
                 moveRight = 0;
 
                 gameWindow.clear(sf::Color::Black);
-
+                //в Метод Draw 
                 /// \brief Отрисовка заднего фона.
                 /// 
                 /// Этот блок кода отрисовывает заднюю панель игрового поля (Backboard).
@@ -1284,12 +1296,12 @@ restart:
                     }
 
                     for (int i = 0; i < 4; i++) {
-                        spritePiece.setTextureRect(sf::IntRect(holdPiece * textureSize, 0, textureSize, textureSize));
+                        spritePiece.setTextureRect(sf::IntRect(holdPiece * TEXTURE_SIZE, 0, TEXTURE_SIZE, TEXTURE_SIZE));
                         int xOffset = 0;
                         if (holdPiece == I_TETROMINO || holdPiece == O_TETROMINO) {
                             xOffset = 15;
                         }
-                        spritePiece.setPosition(holdPieceBlocks[i].x * textureSize - 65 - xOffset, holdPieceBlocks[i].y * textureSize - 10);
+                        spritePiece.setPosition(holdPieceBlocks[i].x * TEXTURE_SIZE - 65 - xOffset, holdPieceBlocks[i].y * TEXTURE_SIZE - 10);
                         gameWindow.draw(spritePiece);
                     }
                 }
@@ -1341,12 +1353,12 @@ restart:
                         }
 
                         for (int j = 0; j < 4; j++) {
-                            spritePiece.setTextureRect(sf::IntRect(nextColor * textureSize, 0, textureSize, textureSize));
+                            spritePiece.setTextureRect(sf::IntRect(nextColor * TEXTURE_SIZE, 0, TEXTURE_SIZE, TEXTURE_SIZE));
                             int xOffset = 0;
                             if (nextColor == I_TETROMINO || nextColor == O_TETROMINO) {
                                 xOffset = 15;
                             }
-                            spritePiece.setPosition(nextPiece[j].x * textureSize + 395 - xOffset, nextPiece[j].y * textureSize - 10 + (90 * i));
+                            spritePiece.setPosition(nextPiece[j].x * TEXTURE_SIZE + 395 - xOffset, nextPiece[j].y * TEXTURE_SIZE - 10 + (90 * i));
                             gameWindow.draw(spritePiece);
                         }
                     }
@@ -1361,8 +1373,8 @@ restart:
                         if (board[i][j] == 0) {
                             continue;
                         }
-                        spritePiece.setTextureRect(sf::IntRect((board[i][j] - 1) * textureSize, 0, textureSize, textureSize));
-                        spritePiece.setPosition(j * textureSize + 150, i * textureSize - 90 + boardWobble);
+                        spritePiece.setTextureRect(sf::IntRect((board[i][j] - 1) * TEXTURE_SIZE, 0, TEXTURE_SIZE, TEXTURE_SIZE));
+                        spritePiece.setPosition(j * TEXTURE_SIZE + 150, i * TEXTURE_SIZE - 90 + boardWobble);
                         gameWindow.draw(spritePiece);
                     }
                 }
@@ -1372,9 +1384,9 @@ restart:
                 /// Фигуры, которые были заблокированы, анимируются и постепенно исчезают.
                 for (int i = 0; i < piecesLock.size(); i++) {
                     for (int j = 0; j < 4; j++) {
-                        spriteLockedPiece.setTextureRect(sf::IntRect((int)piecesLock.at(i).at(j).animation * textureSize, 0, textureSize, textureSize));
+                        spriteLockedPiece.setTextureRect(sf::IntRect((int)piecesLock.at(i).at(j).animation * TEXTURE_SIZE, 0, TEXTURE_SIZE, TEXTURE_SIZE));
                         spriteLockedPiece.setColor(sf::Color(255, 255, 255, 200));
-                        spriteLockedPiece.setPosition(piecesLock.at(i).at(j).x * textureSize + 150, (piecesLock.at(i).at(j).y - 1) * textureSize - 90 + boardWobble);
+                        spriteLockedPiece.setPosition(piecesLock.at(i).at(j).x * TEXTURE_SIZE + 150, (piecesLock.at(i).at(j).y - 1) * TEXTURE_SIZE - 90 + boardWobble);
                         gameWindow.draw(spriteLockedPiece);
 
                         piecesLock.at(i).at(j).animation += elapsedTime * FRAMERATE * 4;
@@ -1389,9 +1401,9 @@ restart:
                 }
 
                 /// \brief Отрисовка призрачной фигуры (Ghost Piece).
-                spriteGhost.setTextureRect(sf::IntRect(colorPiece * textureSize, 0, textureSize, textureSize));
+                spriteGhost.setTextureRect(sf::IntRect(colorPiece * TEXTURE_SIZE, 0, TEXTURE_SIZE, TEXTURE_SIZE));
                 for (int i = 0; i < 4; i++) {
-                    spriteGhost.setPosition(currentPiece[i].x * textureSize + 150, ghost[i].y * textureSize - 90 + boardWobble);
+                    spriteGhost.setPosition(currentPiece[i].x * TEXTURE_SIZE + 150, ghost[i].y * TEXTURE_SIZE - 90 + boardWobble);
                     gameWindow.draw(spriteGhost);
                 }
 
@@ -1403,17 +1415,17 @@ restart:
 
                 double pieceAlpha = std::max((double)0, (double)(lockDelayValue / lockDelay));
                 for (int i = 0; i < 4; i++) {
-                    spritePiece.setTextureRect(sf::IntRect(7 * textureSize, 0, textureSize, textureSize));
+                    spritePiece.setTextureRect(sf::IntRect(7 * TEXTURE_SIZE, 0, TEXTURE_SIZE, TEXTURE_SIZE));
                     spritePiece.setColor(sf::Color(255, 255, 255, 255));
-                    spritePiece.setPosition(currentPiece[i].x * textureSize + 150, currentPiece[i].y * textureSize - 90 + boardWobble);
+                    spritePiece.setPosition(currentPiece[i].x * TEXTURE_SIZE + 150, currentPiece[i].y * TEXTURE_SIZE - 90 + boardWobble);
                     gameWindow.draw(spritePiece);
 
-                    spritePiece.setTextureRect(sf::IntRect(colorPiece * textureSize, 0, textureSize, textureSize));
+                    spritePiece.setTextureRect(sf::IntRect(colorPiece * TEXTURE_SIZE, 0, TEXTURE_SIZE, TEXTURE_SIZE));
                     spritePiece.setColor(sf::Color(255, 255, 255, pieceAlpha * 255));
-                    spritePiece.setPosition(currentPiece[i].x * textureSize + 150, currentPiece[i].y * textureSize - 90 + boardWobble);
+                    spritePiece.setPosition(currentPiece[i].x * TEXTURE_SIZE + 150, currentPiece[i].y * TEXTURE_SIZE - 90 + boardWobble);
                     gameWindow.draw(spritePiece);
 
-                    pieceIndicatorShape.setPosition(currentPiece[i].x * textureSize + 150, currentPiece[i].y * textureSize - 90 + boardWobble);
+                    pieceIndicatorShape.setPosition(currentPiece[i].x * TEXTURE_SIZE + 150, currentPiece[i].y * TEXTURE_SIZE - 90 + boardWobble);
                     gameWindow.draw(pieceIndicatorShape);
                 }
 

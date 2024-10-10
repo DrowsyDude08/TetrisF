@@ -61,8 +61,8 @@ protected:
     bool isCollided();
     bool isCollidedGhost();
     bool isDead();
-    void createParticle(std::vector<Particle>* particles);
-    int sign(int num);
+    void createParticle(std::vector<Particle>* particles);//V
+    int sign(int num); //проверка того в какую сторону будет идти значение
     int calculateScore(int lineClearCount, int combo);
 
     void swapTextures();
@@ -70,7 +70,7 @@ protected:
     std::string texturePiecePath = resourcePath + "/Sprites/jstris1.png";
     std::string textureGhostPath = resourcePath + "/Sprites/ghost.png";
     
-    int textureSize = 30;
+    int TEXTURE_SIZE = 30;
 };
 
 #endif // MAINGAMECONTROLLER_HPP

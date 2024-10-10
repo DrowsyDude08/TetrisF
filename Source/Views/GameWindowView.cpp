@@ -128,9 +128,9 @@ void GameWindowView::handleMainMenuKeyboardInput(const sf::Event& event) {
             selectedButtonIndex = (selectedButtonIndex + 1) % 3;
             selectMainMenuButton(selectedButtonIndex);
         }
-        else if (event.type == sf::Keyboard::Enter) {
+        /*else if (event.type == sf::Keyboard::Enter) {
             selectMainMenuButton(selectedButtonIndex);
-        }
+        }*/
     }
 }
 
@@ -269,6 +269,12 @@ void GameWindowView::selectGameOverButton(int index) {
     }
     updateGameOverButtonAppearance();
 }
+/**
+* Обновляет внешний вид кнопок меню game over в зависимости от того, на какую кнопку в данный момент наведен курсор.
+*
+* @param Кнопка наведения курсора - указатель на кнопку, на которую в данный момент наведен курсор. Если кнопка не наведена, это должно быть значение nullptr.
+* * @return void
+*/
 void GameWindowView::updateGameOverButtonAppearance() {
     gameOverReplayButton.setFillColor(hoveredButton == &gameOverReplayButton ? palette.selectedButtonColor : palette.defaultButtonColor);
     gameOverToMainMenuButton.setFillColor(hoveredButton == &gameOverToMainMenuButton ? palette.selectedButtonColor : palette.defaultButtonColor);

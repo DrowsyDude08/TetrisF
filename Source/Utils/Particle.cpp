@@ -1,6 +1,6 @@
 #include "Particle.hpp"
 #include <cmath>
-
+#include <numbers>
 Particle::Particle(int x, int y, int speed, int direction) {
     this->x = x;
     this->y = y;
@@ -9,7 +9,7 @@ Particle::Particle(int x, int y, int speed, int direction) {
 }
 
 void Particle::update(double timePerFrame) {
-    double angle = this->direction * (std::cos(-1) / 180.0);
+    double angle = this->direction * (std::numbers::pi / 180.0);
     this->x += this->speed * cos(angle) * timePerFrame;
     this->y += this->speed * sin(angle) * timePerFrame;
     this->alpha -= 400 * timePerFrame;

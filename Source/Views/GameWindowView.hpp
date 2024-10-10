@@ -15,22 +15,21 @@ public:
 
     void handleMainMenuMouseMove(int mouseX, int mouseY, GameState gameState);
     void handleMainMenuKeyboardInput(const sf::Event& event);
-    void handleInput(const sf::Event& event); 
-    void handleSaveButtonClick();
+    //void handleSaveButtonClick();
 
-    void handlePauseMouseMove(int mouseX, int mouseY);
-    void handlePauseKeyboardInput(const sf::Event& event);
+    //void handlePauseMouseMove(int mouseX, int mouseY);
+    //void handlePauseKeyboardInput(const sf::Event& event);
 
-    void handleGameOverMouseMove(int mouseX, int mouseY);
-    void handleGameOverKeyboardInput(const sf::Event& event);
+    //void handleGameOverMouseMove(int mouseX, int mouseY);
+    //void handleGameOverKeyboardInput(const sf::Event& event);
 
     bool isStartButtonClicked(int mouseX, int mouseY);
     bool isChangeColorButtonClicked(int mouseX, int mouseY);
     bool isExitButtonClicked(int mouseX, int mouseY);
     bool isGameOverReplayClicked(int mouseX, int mouseY);
     bool isGameOverToMainMenuClicked(int mouseX, int mouseY);
-    bool isPauseContinueClicked(int mouseX, int mouseY);
-    bool isPauseExitToMenuClicked(int mouseX, int mouseY);
+    //bool isPauseContinueClicked(int mouseX, int mouseY);
+    //bool isPauseExitToMenuClicked(int mouseX, int mouseY);
     int selectedButtonIndex;
 private:
     sf::RenderWindow& window;

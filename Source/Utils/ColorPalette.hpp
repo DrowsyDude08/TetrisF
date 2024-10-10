@@ -4,6 +4,13 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 
+
+/**
+ * @* @brief Создает объект Color Palette со значениями цветов по умолчанию.
+ *
+ * * Этот конструктор инициализирует объект Color Palette с предопределенными значениями цветов для различных элементов пользовательского интерфейса.
+ *
+ */
 struct ColorPalette{
     ColorPalette()
         : defaultButtonColor(183, 180, 242),
