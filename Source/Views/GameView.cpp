@@ -29,7 +29,8 @@ GameView::GameView(sf::RenderWindow& window)
             board[i][j] = 0;
         }
     }
-
+    window.setFramerateLimit(FRAMERATE);
+    
     trackingFrameTime.restart();
     trackingGameTime.restart();
     elapsedGameTime.restart();
@@ -37,7 +38,7 @@ GameView::GameView(sf::RenderWindow& window)
     initializeTextures();
     fontGame.loadFromFile(resourcePath + "/Fonts/Minecraft.ttf");
 
-    initializeButtons();
+    initializeButtons(window);
 }
 
 void GameView::drawGameOverMenu(const LeaderBoard& leaderboard, int currentScore){}
@@ -358,9 +359,50 @@ void GameView::drawText(sf::RenderWindow& gameWindow){
 
 }
     //---------------
+void GameView::createParticle(std::vector<Particle>* particles) {
+    for (int i = 0; i < 4; i++) {
+        Particle particle((currentPiece[i].x * 30) + 150 + 15 + (rand() % 60 - 30),
+            (currentPiece[i].y * 30) - 60 - 30,
+            rand() % 250 + 150,
+            rand() % 360);
+        particles->push_back(particle);
+    }
+}
+void GameView::initializeButtons(sf::RenderWindow& gameWindow){
+    float buttonWidth = 200;
+    float buttonHeight = 50;
+    float buttonSpacing = 20;
 
-void GameView::initializeButtons(){}
-void GameView::selectGameOverButton(int index){}
-void GameView::updateGameOverButtonAppearance(){}
+    float centerX = (gameWindow.getSize().x - buttonWidth) / 2;
 
+
+    gameOverReplayButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    gameOverReplayButton.setPosition(centerX, 450);
+    gameOverReplayButton.setFillColor(palette.defaultButtonColor);
+
+    gameOverToMainMenuButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    gameOverToMainMenuButton.setPosition(centerX, 450 + buttonHeight + buttonSpacing);
+    gameOverToMainMenuButton.setFillColor(palette.defaultButtonColor);
+}
+void GameView::selectGameOverButton(int index){
+    switch (index) {
+    case 0:
+        hoveredButton = &gameOverReplayButton;
+        break;
+    case 1:
+        hoveredButton = &gameOverToMainMenuButton;
+        break;
+    default:
+        hoveredButton = nullptr;
+        break;
+    }
+    updateGameOverButtonAppearance();
+}
+void GameView::updateGameOverButtonAppearance(){
+    gameOverReplayButton.setFillColor(hoveredButton == &gameOverReplayButton ? palette.selectedButtonColor : palette.defaultButtonColor);
+    gameOverToMainMenuButton.setFillColor(hoveredButton == &gameOverToMainMenuButton ? palette.selectedButtonColor : palette.defaultButtonColor);
+
+    gameOverReplayText.setFillColor(hoveredButton == &gameOverReplayButton ? palette.selectedTextColor : palette.defaultTextColor);
+    gameOverToMainMenuText.setFillColor(hoveredButton == &gameOverToMainMenuButton ? palette.selectedTextColor : palette.defaultTextColor);
+}
 

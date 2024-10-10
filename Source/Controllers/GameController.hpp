@@ -22,7 +22,7 @@ constexpr auto T_TETROMINO = 6;
 
 class GameController {
 public:
-    GameController(sf::RenderWindow& window);
+    GameController();
 
     void runGame();
 
@@ -33,7 +33,8 @@ protected:
     sf::RenderWindow window;
     LeaderBoard leaderboard;
     GameView gameView;
-    //GameState currentState = GameState::MainMenu;
+    GameState currentState;
+    
 
     bool isGameOver;
 
@@ -61,6 +62,36 @@ protected:
     //----------------------------
 
     int TEXTURE_SIZE = 30;
+
+    // Флаги управления
+    int isRotateClockWise;
+    int isRotateCounterClockwise;
+    int isHardDrop;
+    int isMoveRight;
+    int isMoveLeft;
+    int isHoldPiece;
+    int isSidehit;
+    int isTSpin;
+    int isRestart;
+    int score;
+
+    int keyRotateClockwise;
+    int keyRotateCounterClockwise;
+    int keyHardDrop;
+    int keyMoveRight;
+    int keyMoveLeft;
+    int keyRightHold;
+    int keyLeftHold;
+    bool isOnFocus;
+    bool isTouchGround;
+    int lastKeyPressed;
+    int keyRestart;
+
+    double gameTimer;
+    double gameDelay;
+    double fastDropDelay;
+    double airSoftDrop;
+    double airSoftDropValue;
 
     Piece currentPiece[4]{}, previousPiecePosition[4]{}, ghost[4]{};
 };

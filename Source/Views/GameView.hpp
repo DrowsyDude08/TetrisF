@@ -31,7 +31,6 @@ public:
     bool isGameOverToMainMenuClicked(int mouseX, int mouseY);
     int selectedButtonIndex;
 
-protected:
 
     int holdPiece;
     int moveX;
@@ -104,10 +103,12 @@ protected:
     void drawCurrentTetramino(sf::RenderWindow& gameWindow);
     void drawParticles(sf::RenderWindow& gameWindow);
     void drawText(sf::RenderWindow& gameWindow);
+    void createParticle(std::vector<Particle>* particles);
+
     //---------------
     std::string resourcePath = RESOURCE_DIR;
 
-    void initializeButtons();
+    void initializeButtons(sf::RenderWindow& gameWindow);
     void selectGameOverButton(int index);
     void updateGameOverButtonAppearance();
 

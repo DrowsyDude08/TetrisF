@@ -1038,8 +1038,6 @@ restart:
                     if (!isCollided() && lockDelayValue < 0) {
                         if (!holded) {
                             createParticle(&particles);
-                            createParticle(&particles);
-                            createParticle(&particles);
 
                             std::vector<PieceLock> pieceLockList;
                             for (int i = 0; i < 4; i++) {
