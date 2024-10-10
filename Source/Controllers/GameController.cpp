@@ -890,7 +890,7 @@ restart:
                         currentPiece[i].y++;
                     }
 
-                    if (!isCollided() && lockDelayValue < 0) {
+                    if (!isCollided() && gameView.lockDelayValue < 0) {
                         if (!gameView.holded) {
                             gameView.createParticle(&gameView.particles);
 
