@@ -1,24 +1,17 @@
 #ifndef GAMECONTROLLER_HPP
 #define GAMECONTROLLER_HPP
 
-#include "../Views/GameView.hpp"
-#include "../Utils/LeaderBoard.hpp"
-#include "../Utils/GameStates.hpp"
-#include "../Utils/Piece.hpp"
-#include <cmath>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <vector>
+#include <cmath>
+#include "../Models/Tetramino.hpp"
+#include "../Views/GameView.hpp"
+#include "../Views/MenuVIew.hpp"
+#include "../Utils/LeaderBoard.hpp"
+#include "../Utils/GameStates.hpp"
+#include "../Utils/Piece.hpp"
 
-
-
-constexpr auto Z_TETROMINO = 0;
-constexpr auto L_TETROMINO = 1;
-constexpr auto O_TETROMINO = 2;
-constexpr auto S_TETROMINO = 3;
-constexpr auto I_TETROMINO = 4;
-constexpr auto J_TETROMINO = 5;
-constexpr auto T_TETROMINO = 6;
 
 class GameController {
 public:
@@ -33,6 +26,7 @@ protected:
     sf::RenderWindow window;
     LeaderBoard leaderboard;
     GameView gameView;
+    MenuView menuView;
     GameState currentState;
     
 

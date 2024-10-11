@@ -3,6 +3,7 @@
 GameController::GameController()
     : isGameOver(false),
     gameView(window),
+    menuView(window),
     isRotateClockWise(0),
     isRotateCounterClockwise(0),
     isHardDrop(0),
@@ -28,10 +29,40 @@ GameController::GameController()
     airSoftDrop(8),
     airSoftDropValue(airSoftDrop)
 
-
 {
     currentState = GameState::MainMenu;
 };
+
+void GameController::runGame() {
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+            else {
+                menuView.handleMainMenuEvent(event);
+            }
+        }
+
+        window.clear();
+
+        switch (currentState) {
+        case GameState::MainMenu:
+            menuView.drawMainMenu();
+            break;
+        case GameState::InGame:
+            startTetrisGame();
+            break;
+        case GameState::GameOver:
+            menuView.drawGameOverMenu(leaderboard, score);
+            leaderboard.addScore("Игрок 1", score);
+            break;
+        }
+
+        window.display();
+    }
+}
 
 std::vector<int> GameController::generateNewBag(){
         std::vector<int> templateBag;
@@ -1130,5 +1161,3 @@ restart:
             gameView.trackingGameTime.restart();
         }
     }
-
-
